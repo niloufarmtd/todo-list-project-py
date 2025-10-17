@@ -15,21 +15,29 @@ class TodoManager:
         self.max_projects = int(os.getenv("MAX_NUMBER_OF_PROJECTS", 10))
         self.max_tasks = int(os.getenv("MAX_NUMBER_OF_TASKS_PER_PROJECT", 50))
     
-    def create_project(self, name, description):
-        """Create a new project with validation"""
-        # Check maximum projects limit
-        if len(self.storage.projects) >= self.max_projects:
-            return False, f"Cannot have more than {self.max_projects} projects"
-        
-        # Check for duplicate project names
-        for project in self.storage.projects:
-            if project.name == name:
-                return False, "Project name already exists"
-        
-        # Create and save the project
-        project = Project(None, name, description)
-        self.storage.add_project(project)
-        return True, "Project created successfully"
+   def create_project(self, name, description):
+    """Create a new project with validation"""
+    # Validate name length
+    if len(name) > 30:
+        return False, "Project name cannot exceed 30 characters"
+    
+    # Validate description length  
+    if len(description) > 150:
+        return False, "Project description cannot exceed 150 characters"
+    
+    # Check maximum projects limit
+    if len(self.storage.projects) >= self.max_projects:
+        return False, f"Cannot have more than {self.max_projects} projects"
+    
+    # Check for duplicate project names
+    for project in self.storage.projects:
+        if project.name == name:
+            return False, "Project name already exists"
+    
+    # Create and save the project
+    project = Project(None, name, description)
+    self.storage.add_project(project)
+    return True, "Project created successfully"
     
     def add_task(self, project_id, title, description):
         """Add a new task to a project with validation"""
