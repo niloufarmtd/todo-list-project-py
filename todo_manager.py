@@ -187,9 +187,9 @@ def delete_task(self, task_id):
     return True, f"Task status changed to {new_status}"
     
 
-    def list_projects(self):
-        """Get all projects"""
-        return self.storage.get_all_projects()
+   def list_projects(self):
+    """Get all projects sorted by creation time (newest first)"""
+    return sorted(self.storage.projects, key=lambda x: x.created_at, reverse=True)
     
     def list_tasks(self, project_id):
         """Get all tasks for a specific project"""
