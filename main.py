@@ -9,10 +9,12 @@ def display_menu():
     print("3. Add task to project")
     print("4. Show tasks of a project")
     print("5. Edit project")
-    print("6. Delete task")
-    print("7. Change task status")
-    print("8. Edit task")
-    print("9. Exit")
+    print("6. Delete project") 
+    print("7. Delete task")
+    print("8. Change task status")
+    print("9. Edit task")
+    print("10. Exit")
+
 
 
 def main():
@@ -21,7 +23,7 @@ def main():
 
     while True:
         display_menu()
-        choice = input("Please enter your choice (1-9): ")
+        choice = input("Please enter your choice (1-10): ")
 
         if choice == "1":
             # Create new project
@@ -90,6 +92,32 @@ def main():
                 print("❌ Please enter a valid number for Project ID")
 
         elif choice == "6":
+          # Delete project
+            try:
+                project_id = int(input("Project ID to delete: "))
+                # Confirm deletion
+                confirm = input("Are you sure? This will delete ALL tasks in this project! (y/n): ")
+            if confirm.lower() == 'y':
+                # First, let's show what will be deleted
+                tasks = manager.list_tasks(project_id)
+                if tasks:
+                    print(f"  This will delete {len(tasks)} tasks:")
+                    for task in tasks:
+                        print(f"   - {task.title}")
+            
+            confirm_final = input("Type 'DELETE' to confirm: ")
+            if confirm_final == 'DELETE':
+                success, message = manager.delete_project(project_id)
+                print("✅" if success else "❌", message)
+            else:
+                print("❌ Deletion cancelled")
+            else:
+                print("❌ Deletion cancelled")
+        except ValueError:
+            print("❌ Please enter a valid number for Project ID")
+
+        elif choice == "7":
+            
             # Delete task
             try:
                 task_id = int(input("Task ID to delete: "))
@@ -98,7 +126,7 @@ def main():
             except ValueError:
                 print("❌ Please enter a valid number for Task ID")
 
-        elif choice == "7":
+        elif choice == "8":
             # Change task status
             try:
                 task_id = int(input("Task ID: "))
@@ -109,7 +137,7 @@ def main():
             except ValueError:
                 print("❌ Please enter a valid number for Task ID")
 
-        elif choice == "8":
+        elif choice == "9":
 
                    # Edit task
             try:
@@ -125,7 +153,7 @@ def main():
             except ValueError:
                 print("❌ Please enter a valid number for Task ID")
         
-        elif choice == "9":
+        elif choice == "10":
             # Exit
             print("Goodbye!")
             break
@@ -136,7 +164,7 @@ def main():
             break
 
         else:
-            print("❌ Invalid choice. Please enter a number between 1-9")
+            print("❌ Invalid choice. Please enter a number between 1-10")
 8
 
 if __name__ == "__main__":
