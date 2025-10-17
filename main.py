@@ -11,7 +11,8 @@ def display_menu():
     print("5. Edit project")
     print("6. Delete task")
     print("7. Change task status")
-    print("8. Exit")
+    print("8. Edit task")
+    print("9. Exit")
 
 
 def main():
@@ -20,7 +21,7 @@ def main():
 
     while True:
         display_menu()
-        choice = input("Please enter your choice (1-8): ")
+        choice = input("Please enter your choice (1-9): ")
 
         if choice == "1":
             # Create new project
@@ -107,12 +108,33 @@ def main():
                 print("❌ Please enter a valid number for Task ID")
 
         elif choice == "8":
+
+                   # Edit task
+            try:
+                task_id = int(input("Task ID to edit: "))
+                new_title = input("New title: ")
+                new_description = input("New description: ")
+                print("Status options: todo, doing, done")
+                new_status = input("New status: ")
+                new_deadline = input("New deadline (YYYY-MM-DD) or press Enter: ")
+                new_deadline_str = new_deadline if new_deadline.strip() else None
+                success, message = manager.edit_task(task_id, new_title, new_description, new_status, new_deadline_str)
+                print("✅" if success else "❌", message)
+            except ValueError:
+                print("❌ Please enter a valid number for Task ID")
+        
+        elif choice == "9":
             # Exit
             print("Goodbye!")
             break
 
         else:
-            print("❌ Invalid choice. Please enter a number between 1-8")
+            # Exit
+            print("Goodbye!")
+            break
+
+        else:
+            print("❌ Invalid choice. Please enter a number between 1-9")
 8
 
 if __name__ == "__main__":
