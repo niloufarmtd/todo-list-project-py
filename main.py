@@ -45,11 +45,18 @@ def main():
                 project_id = int(input("Project ID: "))
                 title = input("Task title: ")
                 description = input("Task description: ")
-                success, message = manager.add_task(project_id, title, description)
+                
                 print("✅" if success else "❌", message)
             except ValueError:
                 print("❌ Please enter a valid number for Project ID")
+    
+                deadline_input = input("Deadline (YYYY-MM-DD) or press Enter for no deadline: ")
 
+                deadline_str = deadline_input if deadline_input.strip() else None
+
+                success, message = manager.add_task(project_id, title, description, deadline_str)
+
+        
         elif choice == "4":
             # Show tasks of a project
             try:
@@ -60,7 +67,11 @@ def main():
                 else:
                     print(f"\n📋 Tasks for Project {project_id}:")
                     for task in tasks:
-                        print(f"   {task.id}. {task.title} - Status: {task.status}")
+                        
+                         deadline_str = task.deadline.strftime("%Y-%m-%d") if task.deadline else "No deadline"
+
+                        print(f"   {task.id}. {task.title} - Status: {task.status} - Deadline: {deadline_str}")
+
             except ValueError:
                 print("❌ Please enter a valid number for Project ID")
 
