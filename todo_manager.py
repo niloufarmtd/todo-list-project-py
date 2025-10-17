@@ -110,7 +110,50 @@ class TodoManager:
     return True, "Project updated successfully"
 
     
-    def delete_task(self, task_id):
+    def edit_task(self, task_id, new_title, new_description, new_status, new_deadline_str=None):
+    """Edit task details"""
+    # Validate title length
+    if len(new_title) > 30:
+        return False, "Task title cannot exceed 30 characters"
+    
+    # Validate description length
+    if len(new_description) > 150:
+        return False, "Task description cannot exceed 150 characters"
+    
+    # Validate status
+    valid_statuses = ["todo", "doing", "done"]
+    if new_status not in valid_statuses:
+        return False, "Invalid status. Must be: todo, doing, or done"
+    
+    # Validate and parse deadline
+    new_deadline = None
+    if new_deadline_str:
+        try:
+            new_deadline = datetime.strptime(new_deadline_str, "%Y-%m-%d")
+            if new_deadline < datetime.now():
+                return False, "Deadline cannot be in the past"
+        except ValueError:
+            return False, "Invalid deadline format. Use YYYY-MM-DD"
+    
+    # Find the task
+    task = None
+    for t in self.storage.tasks:
+        if t.id == task_id:
+            task = t
+            break
+    
+    if not task:
+        return False, "Task not found"
+    
+    # Update task
+    task.title = new_title
+    task.description = new_description
+    task.status = new_status
+    task.deadline = new_deadline
+    
+    return True, "Task updated successfully"
+
+def delete_task(self, task_id):
     """Delete a specific task"""
     # Find the task
     task_exists = any(t.id == task_id for t in self.storage.tasks)
