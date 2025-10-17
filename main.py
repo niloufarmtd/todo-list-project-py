@@ -35,10 +35,12 @@ def main():
             projects = manager.list_projects()
             if not projects:
                 print("📭 No projects found")
-            else:
-                print("\n📂 Your Projects:")
-                for project in projects:
-                    print(f"   {project.id}. {project.name} - {project.description}")
+             else:
+                print("\n Your Projects (newest first):")
+            for project in projects:
+                created_str = project.created_at.strftime("%Y-%m-%d %H:%M")
+                print(f"   {project.id}. {project.name} - {project.description}")
+                print(f"      Created: {created_str}")
 
         elif choice == "3":
             # Add task to project
