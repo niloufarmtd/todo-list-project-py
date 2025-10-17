@@ -29,12 +29,12 @@ class TodoManager:
 
         # Check maximum projects limit
         if len(self.storage.projects) >= self.max_projects:
-            return False, f"Cannot have more than {self.max_projects} projects"
+             return False, f"❌ Maximum projects limit reached! You can only have {self.max_projects} projects."
 
         # Check for duplicate project names
         for project in self.storage.projects:
             if project.name == name:
-                return False, "Project name already exists"
+                 return False, "❌ Project name already exists! Please choose a different name."
 
         # Create and save the project
         project = Project(None, name, description)
@@ -60,10 +60,9 @@ class TodoManager:
                 deadline = datetime.strptime(deadline_str, "%Y-%m-%d")
                 # Check if deadline is in the future
                 if deadline < datetime.now():
-                    return False, "Deadline cannot be in the past"
+                    return False, "❌ Deadline cannot be in the past! Please enter a future date."
             except ValueError:
-                return False, "Invalid deadline format. Use YYYY-MM-DD"
-
+                 return False, "❌ Invalid date format! Please use YYYY-MM-DD (e.g., 2024-12-31)"
         # Check if project exists
         project_exists = any(p.id == project_id for p in self.storage.projects)
         if not project_exists:
@@ -72,7 +71,7 @@ class TodoManager:
         # Check maximum tasks limit for this project
         project_tasks = self.storage.get_tasks_by_project(project_id)
         if len(project_tasks) >= self.max_tasks:
-            return False, f"Cannot have more than {self.max_tasks} tasks in a project"
+             return False, f"❌ Task limit reached! Each project can have maximum {self.max_tasks} tasks."
 
         # Create and save the task
         task = Task(None, title, description, project_id, deadline)
@@ -97,12 +96,12 @@ class TodoManager:
                 break
 
         if not project:
-            return False, "Project not found"
+            return False, "❌ Project not found! Please check the Project ID."
 
         # Check for duplicate name (excluding current project)
         for p in self.storage.projects:
             if p.id != project_id and p.name == new_name:
-                return False, "Project name already exists"
+                return False, "❌ Project name already exists! Please choose a different name."
 
         # Update project
         project.name = new_name
@@ -123,7 +122,7 @@ class TodoManager:
         # Validate status
         valid_statuses = ["todo", "doing", "done"]
         if new_status not in valid_statuses:
-            return False, "Invalid status. Must be: todo, doing, or done"
+            return False, "❌ Invalid status! Please choose from: 'todo', 'doing', or 'done'"
 
         # Validate and parse deadline
         new_deadline = None
@@ -131,9 +130,9 @@ class TodoManager:
             try:
                 new_deadline = datetime.strptime(new_deadline_str, "%Y-%m-%d")
                 if new_deadline < datetime.now():
-                    return False, "Deadline cannot be in the past"
+                     return False, "❌ Deadline cannot be in the past! Please enter a future date."
             except ValueError:
-                return False, "Invalid deadline format. Use YYYY-MM-DD"
+                return False, "❌ Invalid date format! Please use YYYY-MM-DD (e.g., 2024-12-31)"
 
         # Find the task
         task = None
@@ -143,7 +142,7 @@ class TodoManager:
                 break
 
         if not task:
-            return False, "Task not found"
+            return False, "❌ Task not found! Please check the Task ID."
 
         # Update task
         task.title = new_title
@@ -159,7 +158,7 @@ class TodoManager:
         task_exists = any(t.id == task_id for t in self.storage.tasks)
 
         if not task_exists:
-            return False, "Task not found"
+             return False, "❌ Task not found! Please check the Task ID."
 
         # Delete the task
         self.storage.delete_task(task_id)
@@ -170,7 +169,7 @@ class TodoManager:
         # Validate status
         valid_statuses = ["todo", "doing", "done"]
         if new_status not in valid_statuses:
-            return False, "Invalid status. Must be: todo, doing, or done"
+           return False, "❌ Invalid status! Please choose from: 'todo', 'doing', or 'done'"
 
         # Find the task
         task = None
@@ -180,7 +179,7 @@ class TodoManager:
                 break
 
         if not task:
-            return False, "Task not found"
+            return False, "❌ Task not found! Please check the Task ID."
 
         # Update status
         task.status = new_status
