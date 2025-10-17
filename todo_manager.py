@@ -63,6 +63,38 @@ class TodoManager:
     task = Task(None, title, description, project_id)
     self.storage.add_task(task)
     return True, "Task created successfully"
+
+       def edit_project(self, project_id, new_name, new_description):
+    """Edit an existing project"""
+    # Validate name length
+    if len(new_name) > 30:
+        return False, "Project name cannot exceed 30 characters"
+    
+    # Validate description length
+    if len(new_description) > 150:
+        return False, "Project description cannot exceed 150 characters"
+    
+    # Find the project
+    project = None
+    for p in self.storage.projects:
+        if p.id == project_id:
+            project = p
+            break
+    
+    if not project:
+        return False, "Project not found"
+    
+    # Check for duplicate name (excluding current project)
+    for p in self.storage.projects:
+        if p.id != project_id and p.name == new_name:
+            return False, "Project name already exists"
+
+    # Update project
+    project.name = new_name
+    project.description = new_description
+    return True, "Project updated successfully"
+       
+       
     def list_projects(self):
         """Get all projects"""
         return self.storage.get_all_projects()
