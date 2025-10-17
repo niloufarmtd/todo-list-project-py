@@ -106,7 +106,29 @@ class TodoManager:
     # Delete the task
     self.storage.delete_task(task_id)
     return True, "Task deleted successfully"
-       
+
+    def change_task_status(self, task_id, new_status):
+    """Change task status (todo/doing/done)"""
+    # Validate status
+    valid_statuses = ["todo", "doing", "done"]
+    if new_status not in valid_statuses:
+        return False, "Invalid status. Must be: todo, doing, or done"
+    
+    # Find the task
+    task = None
+    for t in self.storage.tasks:
+        if t.id == task_id:
+            task = t
+            break
+    
+    if not task:
+        return False, "Task not found"
+    
+    # Update status
+    task.status = new_status
+    return True, f"Task status changed to {new_status}"
+    
+
     def list_projects(self):
         """Get all projects"""
         return self.storage.get_all_projects()
