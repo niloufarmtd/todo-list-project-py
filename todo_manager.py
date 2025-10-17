@@ -39,7 +39,10 @@ class TodoManager:
     self.storage.add_project(project)
     return True, "Project created successfully"
     
-   def add_task(self, project_id, title, description):
+         from datetime import datetime 
+
+    def add_task(self, project_id, title, description, deadline_str=None):
+    
     """Add a new task to a project with validation"""
     # Validate title length
     if len(title) > 30:
@@ -48,7 +51,19 @@ class TodoManager:
     # Validate description length
     if len(description) > 150:
         return False, "Task description cannot exceed 150 characters"
+
+     # Validate and parse deadline
+    deadline = None
+    if deadline_str:
+        try:
+            deadline = datetime.strptime(deadline_str, "%Y-%m-%d")
+            # Check if deadline is in the future
+            if deadline < datetime.now():
+                return False, "Deadline cannot be in the past"
+        except ValueError:
+            return False, "Invalid deadline format. Use YYYY-MM-DD"
     
+
     # Check if project exists
     project_exists = any(p.id == project_id for p in self.storage.projects)
     if not project_exists:
@@ -60,7 +75,7 @@ class TodoManager:
         return False, f"Cannot have more than {self.max_tasks} tasks in a project"
     
     # Create and save the task
-    task = Task(None, title, description, project_id)
+    task = Task(None, title, description, project_id, deadline)
     self.storage.add_task(task)
     return True, "Task created successfully"
 
