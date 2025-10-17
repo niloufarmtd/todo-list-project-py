@@ -3,7 +3,7 @@ from datetime import datetime
 class Project:
     """Model for representing a project"""
     
-    def __init__(self, id, name, description):
+     def __init__(self, id, name, description):
         self.id = id
         self.name = name
         self.description = description
