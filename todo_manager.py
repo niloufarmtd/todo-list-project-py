@@ -93,7 +93,19 @@ class TodoManager:
     project.name = new_name
     project.description = new_description
     return True, "Project updated successfully"
-       
+
+    
+    def delete_task(self, task_id):
+    """Delete a specific task"""
+    # Find the task
+    task_exists = any(t.id == task_id for t in self.storage.tasks)
+    
+    if not task_exists:
+        return False, "Task not found"
+    
+    # Delete the task
+    self.storage.delete_task(task_id)
+    return True, "Task deleted successfully"
        
     def list_projects(self):
         """Get all projects"""
