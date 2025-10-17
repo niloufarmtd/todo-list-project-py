@@ -106,7 +106,8 @@ class TodoManager:
         # Update project
         project.name = new_name
         project.description = new_description
-        return True, "Project updated successfully"
+                  return True, "Project updated successfully"
+    
 
     def edit_task(self, task_id, new_title, new_description, new_status, new_deadline_str=None):
         """Edit task details"""
