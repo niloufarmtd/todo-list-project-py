@@ -25,10 +25,11 @@ class InMemoryStorage:
         """Get all projects"""
         return self.projects
     
-    def get_tasks_by_project(self, project_id):
-        """Get all tasks for a specific project"""
-        return [task for task in self.tasks if task.project_id == project_id]
-    
+     def get_tasks_by_project(self, project_id):
+        """Get all tasks for a specific project sorted by creation time"""
+        tasks = [task for task in self.tasks if task.project_id == project_id]
+        return sorted(tasks, key=lambda x: x.created_at, reverse=True)
+       
     def delete_project(self, project_id):
         """Delete a project and all its tasks (Cascade Delete)"""
         # Remove project
