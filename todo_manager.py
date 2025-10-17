@@ -39,23 +39,30 @@ class TodoManager:
     self.storage.add_project(project)
     return True, "Project created successfully"
     
-    def add_task(self, project_id, title, description):
-        """Add a new task to a project with validation"""
-        # Check if project exists
-        project_exists = any(p.id == project_id for p in self.storage.projects)
-        if not project_exists:
-            return False, "Project does not exist"
-        
-        # Check maximum tasks limit for this project
-        project_tasks = self.storage.get_tasks_by_project(project_id)
-        if len(project_tasks) >= self.max_tasks:
-            return False, f"Cannot have more than {self.max_tasks} tasks in a project"
-        
-        # Create and save the task
-        task = Task(None, title, description, project_id)
-        self.storage.add_task(task)
-        return True, "Task created successfully"
+   def add_task(self, project_id, title, description):
+    """Add a new task to a project with validation"""
+    # Validate title length
+    if len(title) > 30:
+        return False, "Task title cannot exceed 30 characters"
     
+    # Validate description length
+    if len(description) > 150:
+        return False, "Task description cannot exceed 150 characters"
+    
+    # Check if project exists
+    project_exists = any(p.id == project_id for p in self.storage.projects)
+    if not project_exists:
+        return False, "Project does not exist"
+    
+    # Check maximum tasks limit for this project
+    project_tasks = self.storage.get_tasks_by_project(project_id)
+    if len(project_tasks) >= self.max_tasks:
+        return False, f"Cannot have more than {self.max_tasks} tasks in a project"
+    
+    # Create and save the task
+    task = Task(None, title, description, project_id)
+    self.storage.add_task(task)
+    return True, "Task created successfully"
     def list_projects(self):
         """Get all projects"""
         return self.storage.get_all_projects()
