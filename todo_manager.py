@@ -192,3 +192,9 @@ class TodoManager:
     def list_tasks(self, project_id):
         """Get all tasks for a specific project"""
         return self.storage.get_tasks_by_project(project_id)
+
+
+    def get_task_count(self, project_id):
+    """Get the number of tasks in a project"""
+    tasks = self.storage.get_tasks_by_project(project_id)
+    return len(tasks)
