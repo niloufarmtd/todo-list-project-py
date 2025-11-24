@@ -11,8 +11,8 @@ load_dotenv()
 class TodoManager:
     """Main business logic for Todo List application"""
 
-    def __init__(self):
-        self.storage = InMemoryStorage()
+    def __init__(self, storage):
+        self.storage = storage
         # Get limits from environment variables or use defaults
         self.max_projects = int(os.getenv("MAX_NUMBER_OF_PROJECTS", 10))
         self.max_tasks = int(os.getenv("MAX_NUMBER_OF_TASKS_PER_PROJECT", 50))

@@ -16,8 +16,8 @@ def display_menu():
     print("10. Exit")
 
 def main():
-    """Main function to run the application"""
-    manager = TodoManager()
+    storage = InMemoryStorage()
+    manager = TodoManager(storage)
 
     while True:
         display_menu()
