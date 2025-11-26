@@ -14,6 +14,7 @@ class Task(Base):
     project_id = Column(Integer, ForeignKey("projects.id", ondelete="CASCADE"), nullable=False)
     deadline = Column(DateTime, nullable=True)
     created_at = Column(DateTime, default=datetime.now)
+    closed_at = Column(DateTime, nullable=True) 
     
     project = relationship("Project", back_populates="tasks")
     
