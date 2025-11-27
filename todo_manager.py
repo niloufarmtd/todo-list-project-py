@@ -11,8 +11,10 @@ load_dotenv()
 class TodoManager:
     """Main business logic for Todo List application"""
 
-    def __init__(self):
-        self.storage = InMemoryStorage()
+
+    def __init__(self, storage):
+        self.storage = storage
+>>>>>>> develop
         # Get limits from environment variables or use defaults
         self.max_projects = int(os.getenv("MAX_NUMBER_OF_PROJECTS", 10))
         self.max_tasks = int(os.getenv("MAX_NUMBER_OF_TASKS_PER_PROJECT", 50))
@@ -32,7 +34,8 @@ class TodoManager:
         if len(name) > 30:
             return False, "❌ Project name is too long! Maximum 30 characters allowed."
 
-        # Validate description length
+        # Validate description length  
+>>>>>>> develop
         if len(description) > 150:
             return False, "❌ Project description is too long! Maximum 150 characters allowed."
 
@@ -96,7 +99,8 @@ class TodoManager:
         task = Task(None, title, description, project_id, deadline)
         self.storage.add_task(task)
         return True, "✅ Task created successfully!"
-
+    
+>>>>>>> develop
     def edit_project(self, project_id: int, new_name: str, new_description: str) -> tuple[bool, str]:
         """
         Edit an existing project
@@ -137,6 +141,64 @@ class TodoManager:
         project.description = new_description
         return True, "✅ Project updated successfully!"
 
+    
+    def edit_task(self, task_id: int, new_title: str, new_description: str, new_status: str, new_deadline_str: str = None) -> tuple[bool, str]:
+        """
+        Edit task details
+
+>>>>>>> develop
+        Args:
+            task_id (int): ID of the task to edit
+            new_title (str): New task title (maximum 30 characters)
+            new_description (str): New task description (maximum 150 characters)
+            new_status (str): New task status (must be: todo, doing, or done)
+            new_deadline_str (str, optional): New deadline in YYYY-MM-DD format
+
+        Returns:
+            tuple[bool, str]: (success status, message)
+        """
+        # Validate title length
+        if len(new_title) > 30:
+            return False, "❌ Task title is too long! Maximum 30 characters allowed."
+
+        # Validate description length
+        if len(new_description) > 150:
+            return False, "❌ Task description is too long! Maximum 150 characters allowed."
+
+        # Validate status
+        valid_statuses = ["todo", "doing", "done"]
+        if new_status not in valid_statuses:
+            return False, "❌ Invalid status! Please choose from: 'todo', 'doing', or 'done'"
+
+        # Validate and parse deadline
+        new_deadline = None
+        if new_deadline_str:
+            try:
+                new_deadline = datetime.strptime(new_deadline_str, "%Y-%m-%d")
+                if new_deadline < datetime.now():
+                    return False, "❌ Deadline cannot be in the past! Please enter a future date."
+            except ValueError:
+                return False, "❌ Invalid date format! Please use YYYY-MM-DD (e.g., 2024-12-31)"
+
+        # Find the task
+        task = None
+        for t in self.storage.tasks:
+            if t.id == task_id:
+                task = t
+                break
+
+        if not task:
+            return False, "❌ Task not found! Please check the Task ID."
+
+        # Update task
+        task.title = new_title
+        task.description = new_description
+        task.status = new_status
+        task.deadline = new_deadline
+
+
+        return True, "✅ Task updated successfully"
+
     def delete_project(self, project_id: int) -> tuple[bool, str]:
         """
         Delete a project and all its tasks (Cascade Delete)
@@ -156,7 +218,7 @@ class TodoManager:
         # Delete the project and all its tasks
         self.storage.delete_project(project_id)
         return True, "✅ Project and all its tasks deleted successfully!"
-
+    
     def delete_task(self, task_id: int) -> tuple[bool, str]:
         """
         Delete a specific task
@@ -207,66 +269,11 @@ class TodoManager:
         task.status = new_status
         return True, f"✅ Task status changed to {new_status}"
 
-    def edit_task(self, task_id: int, new_title: str, new_description: str, new_status: str,
-                  new_deadline_str: str = None) -> tuple[bool, str]:
-        """
-        Edit task details
-
-        Args:
-            task_id (int): ID of the task to edit
-            new_title (str): New task title (maximum 30 characters)
-            new_description (str): New task description (maximum 150 characters)
-            new_status (str): New task status (must be: todo, doing, or done)
-            new_deadline_str (str, optional): New deadline in YYYY-MM-DD format
-
-        Returns:
-            tuple[bool, str]: (success status, message)
-        """
-        # Validate title length
-        if len(new_title) > 30:
-            return False, "❌ Task title is too long! Maximum 30 characters allowed."
-
-        # Validate description length
-        if len(new_description) > 150:
-            return False, "❌ Task description is too long! Maximum 150 characters allowed."
-
-        # Validate status
-        valid_statuses = ["todo", "doing", "done"]
-        if new_status not in valid_statuses:
-            return False, "❌ Invalid status! Please choose from: 'todo', 'doing', or 'done'"
-
-        # Validate and parse deadline
-        new_deadline = None
-        if new_deadline_str:
-            try:
-                new_deadline = datetime.strptime(new_deadline_str, "%Y-%m-%d")
-                if new_deadline < datetime.now():
-                    return False, "❌ Deadline cannot be in the past! Please enter a future date."
-            except ValueError:
-                return False, "❌ Invalid date format! Please use YYYY-MM-DD (e.g., 2024-12-31)"
-
-        # Find the task
-        task = None
-        for t in self.storage.tasks:
-            if t.id == task_id:
-                task = t
-                break
-
-        if not task:
-            return False, "❌ Task not found! Please check the Task ID."
-
-        # Update task
-        task.title = new_title
-        task.description = new_description
-        task.status = new_status
-        task.deadline = new_deadline
-
-        return True, "✅ Task updated successfully!"
-
     def list_projects(self) -> list:
         """
         Get all projects sorted by creation time
 
+>>>>>>> develop
         Returns:
             list: List of Project objects sorted by creation time (newest first)
         """
@@ -296,3 +303,4 @@ class TodoManager:
         """
         tasks = self.storage.get_tasks_by_project(project_id)
         return len(tasks)
+>>>>>>> develop
