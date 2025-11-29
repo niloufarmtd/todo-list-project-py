@@ -63,3 +63,11 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
     
     task_repo.delete(task_id)
     return {"message": "Task deleted successfully"}
+
+@router.patch("/tasks/{task_id}/status")
+def update_task_status(task_id: int, status: str, db: Session = Depends(get_db)):
+    task_repo = TaskRepository(db)
+    task_service = TaskService(task_repo)
+    
+    task = task_service.change_task_status(task_id, status)
+    return task
