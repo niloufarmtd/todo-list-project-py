@@ -7,10 +7,8 @@ class TaskBase(BaseModel):
     description: str
     deadline: Optional[datetime] = None
 
-class TaskCreate(BaseModel):
-    title: str
-    description: str
-    deadline: Optional[datetime] = None
+class TaskCreate(TaskBase):
+    pass
 
 class TaskUpdate(TaskBase):
     status: Optional[str] = None
