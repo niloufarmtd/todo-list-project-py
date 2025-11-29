@@ -3,9 +3,10 @@ from sqlalchemy.orm import Session
 from typing import List
 
 from app.api.dependencies import get_db
-from app.schemas.task import TaskCreate, TaskResponse
+from app.schemas.task import TaskCreate, TaskResponse, TaskUpdate
 from app.services.task_service import TaskService
 from app.repositories.task_repository import TaskRepository
+from app.models.task import Task
 
 router = APIRouter()
 
@@ -34,4 +35,31 @@ def get_task(task_id: int, db: Session = Depends(get_db)):
     task = task_repo.get_by_id(task_id)
     if not task:
         raise HTTPException(status_code=404, detail="Task not found")
+    
     return task
+
+
+@router.put("/tasks/{task_id}", response_model=TaskResponse)
+def update_task(task_id: int, task_data: TaskUpdate, db: Session = Depends(get_db)):
+    task_repo = TaskRepository(db)
+    task = task_repo.get_by_id(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+   
+    task.title = task_data.title
+    task.description = task_data.description
+    task.deadline = task_data.deadline
+    if task_data.status:
+        task.status = task_data.status
+    
+    return task_repo.update(task)
+
+@router.delete("/tasks/{task_id}")
+def delete_task(task_id: int, db: Session = Depends(get_db)):
+    task_repo = TaskRepository(db)
+    task = task_repo.get_by_id(task_id)
+    if not task:
+        raise HTTPException(status_code=404, detail="Task not found")
+    
+    task_repo.delete(task_id)
+    return {"message": "Task deleted successfully"}
