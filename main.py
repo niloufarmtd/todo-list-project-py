@@ -183,12 +183,10 @@ def main():
                     if new_deadline_input.strip():
                         new_deadline = task_service.validate_deadline(new_deadline_input)
                     
-                    # First get the task
                     task = task_repo.get_by_id(task_id)
                     if not task:
                         raise TaskNotFoundException(task_id)
                     
-                    # Update task
                     task.title = new_title
                     task.description = new_description
                     task.status = new_status
@@ -203,7 +201,6 @@ def main():
                     print(f"❌ {e}")
             
             elif choice == "10":
-                # Exit
                 print("👋 Goodbye!")
                 break
 

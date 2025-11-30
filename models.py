@@ -3,11 +3,11 @@ from datetime import datetime
 
 class Project:
     """Model for representing a project"""
-    
+
     def __init__(self, id: int, name: str, description: str):
         """
         Initialize a new Project
-        
+
         Args:
             id (int): Project ID (use None for new projects)
             name (str): Project name
@@ -17,7 +17,7 @@ class Project:
         self.name = name
         self.description = description
         self.created_at = datetime.now()
-    
+
     def __str__(self) -> str:
         """String representation of the project"""
         return f"Project {self.id}: {self.name}"
@@ -25,11 +25,11 @@ class Project:
 
 class Task:
     """Model for representing a task"""
-    
+
     def __init__(self, id: int, title: str, description: str, project_id: int, deadline: datetime = None):
         """
         Initialize a new Task
-        
+
         Args:
             id (int): Task ID (use None for new tasks)
             title (str): Task title
@@ -42,7 +42,7 @@ class Task:
         self.description = description
         self.status = "todo"  # default status
         self.project_id = project_id
-        self.deadline = deadline  
+        self.deadline = deadline
         self.created_at = datetime.now()
 
     def __str__(self) -> str:

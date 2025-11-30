@@ -11,8 +11,10 @@ load_dotenv()
 class TodoManager:
     """Main business logic for Todo List application"""
 
+
     def __init__(self, storage):
         self.storage = storage
+>>>>>>> develop
         # Get limits from environment variables or use defaults
         self.max_projects = int(os.getenv("MAX_NUMBER_OF_PROJECTS", 10))
         self.max_tasks = int(os.getenv("MAX_NUMBER_OF_TASKS_PER_PROJECT", 50))
@@ -33,6 +35,7 @@ class TodoManager:
             return False, "❌ Project name is too long! Maximum 30 characters allowed."
 
         # Validate description length  
+>>>>>>> develop
         if len(description) > 150:
             return False, "❌ Project description is too long! Maximum 150 characters allowed."
 
@@ -97,6 +100,7 @@ class TodoManager:
         self.storage.add_task(task)
         return True, "✅ Task created successfully!"
     
+>>>>>>> develop
     def edit_project(self, project_id: int, new_name: str, new_description: str) -> tuple[bool, str]:
         """
         Edit an existing project
@@ -136,11 +140,13 @@ class TodoManager:
         project.name = new_name
         project.description = new_description
         return True, "✅ Project updated successfully!"
+
     
     def edit_task(self, task_id: int, new_title: str, new_description: str, new_status: str, new_deadline_str: str = None) -> tuple[bool, str]:
         """
         Edit task details
 
+>>>>>>> develop
         Args:
             task_id (int): ID of the task to edit
             new_title (str): New task title (maximum 30 characters)
@@ -189,6 +195,7 @@ class TodoManager:
         task.description = new_description
         task.status = new_status
         task.deadline = new_deadline
+
 
         return True, "✅ Task updated successfully"
 
@@ -266,6 +273,7 @@ class TodoManager:
         """
         Get all projects sorted by creation time
 
+>>>>>>> develop
         Returns:
             list: List of Project objects sorted by creation time (newest first)
         """
@@ -295,3 +303,4 @@ class TodoManager:
         """
         tasks = self.storage.get_tasks_by_project(project_id)
         return len(tasks)
+>>>>>>> develop
