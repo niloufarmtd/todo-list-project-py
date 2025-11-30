@@ -11,6 +11,10 @@ class ProjectResponse(BaseModel):
     description: str
     created_at: datetime
     
+class ProjectUpdate(BaseModel):
+    name: str
+    description: str
+    
     class Config:
         from_attributes = True
         
