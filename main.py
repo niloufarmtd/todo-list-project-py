@@ -14,7 +14,7 @@ from app.exceptions.service_exceptions import (
 )
 from datetime import datetime
 import os
-
+   
 def display_menu():
     """Display the main menu"""
     print("\n📝 ToDo List Manager (PostgreSQL)")
@@ -34,6 +34,7 @@ def get_db_session():
     return SessionLocal()
 
 def main():
+    print("⚠️  Note: CLI is deprecated. Use the API at: http://localhost:8000/docs")
     db = get_db_session()
     
     try:
@@ -108,7 +109,9 @@ def main():
                         for task in tasks:
                             deadline_str = task.deadline.strftime("%Y-%m-%d") if task.deadline else "No deadline"
                             status_icon = "🔴" if task.status == "todo" else "🟡" if task.status == "doing" else "🟢"
-                            print(f"   {task.id}. {task.title} - Status: {status_icon} {task.status} - Deadline: {deadline_str}")
+                            print(f"   {task.id}. {task.title}")
+                            print(f"      Description: {task.description}")
+                            print(f"      Status: {status_icon} {task.status} - Deadline: {deadline_str}")
                 except Exception as e:
                     print(f"❌ {e}")
 

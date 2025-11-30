@@ -12,6 +12,13 @@ router = APIRouter()
 
 @router.get("/projects/{project_id}/tasks", response_model=List[TaskResponse])
 def get_project_tasks(project_id: int, db: Session = Depends(get_db)):
+    """
+    Get all tasks for a specific project
+    
+    - **project_id**: ID of the project
+    
+    Returns list of tasks belonging to the project
+    """
     task_repo = TaskRepository(db)
     return task_repo.get_by_project(project_id)
 
@@ -71,3 +78,11 @@ def update_task_status(task_id: int, status: str, db: Session = Depends(get_db))
     
     task = task_service.change_task_status(task_id, status)
     return task
+
+@router.post("/tasks/autoclose-overdue")
+def autoclose_overdue_tasks(db: Session = Depends(get_db)):
+    task_repo = TaskRepository(db)
+    task_service = TaskService(task_repo)
+    
+    closed_count = task_service.close_overdue_tasks()
+    return {"message": f"Closed {closed_count} overdue tasks"}

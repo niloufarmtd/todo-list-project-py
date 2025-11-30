@@ -12,6 +12,12 @@ router = APIRouter()
 
 @router.get("/projects", response_model=List[ProjectResponse])
 def get_projects(db: Session = Depends(get_db)):
+    """
+    Get all projects
+    
+    Returns a list of all projects in the system
+    Includes task count for each project
+    """
     project_repo = ProjectRepository(db)
     task_repo = TaskRepository(db)
     project_service = ProjectService(project_repo, task_repo)
@@ -20,8 +26,20 @@ def get_projects(db: Session = Depends(get_db)):
 
 @router.post("/projects", response_model=ProjectResponse)
 def create_project(project_data: ProjectCreate, db: Session = Depends(get_db)):
+    """
+    Create a new project
+    
+    - **name**: Project name (max 30 characters)
+    - **description**: Project description (max 150 characters)
+    
+    Returns the created project object
+    """
     project_repo = ProjectRepository(db)
     task_repo = TaskRepository(db)
     project_service = ProjectService(project_repo, task_repo)
     
     return project_service.create_project(project_data.name, project_data.description)
+
+@router.get("/health")
+def health_check():
+    return {"status": "healthy", "service": "projects"}
